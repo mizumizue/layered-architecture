@@ -10,3 +10,10 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# .idea
+misc.xml
+modules.xml
+vcs.xml
+.idea/dictionaries
+**.iml
