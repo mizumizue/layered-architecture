@@ -1,5 +1,5 @@
 package controller
 
-// TODO imepments me
+// TODO implements me
 type User struct {
 }
