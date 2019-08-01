@@ -29,7 +29,7 @@ const (
 	nameSeparator = " "
 )
 
-func (u *User) getFullName() string {
+func (u *User) GetFullName() string {
 	return u.FirstName + nameSeparator + u.LastName
 }
 
