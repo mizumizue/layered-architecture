@@ -25,7 +25,7 @@ func NewUserFromUserDto(dto *infrastructure.UserDto) *User {
 }
 
 const (
-	projectID     = "ProjectID"
+	projectID     = "PROJECT_ID"
 	nameSeparator = " "
 )
 

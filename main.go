@@ -1,17 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"github.com/google/martian/log"
-	"github.com/trewanek/LayeredArchitectureWithGolang/application"
+	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/controller"
+	"net/http"
 )
 
+const port = ":8080"
+
 func main() {
-	appUser := application.NewUser()
-	user, err := appUser.GetUserByID("documentID")
-	if err != nil {
-		log.Errorf(err.Error())
-		return
-	}
-	fmt.Println(user.GetFullName())
+	log.Infof("Server started")
+	router := controller.NewRouter()
+	log.Errorf(http.ListenAndServe(port, router).Error())
 }
