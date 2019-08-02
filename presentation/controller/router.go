@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"github.com/google/martian/log"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -52,20 +51,6 @@ func GetPathParam(r *http.Request) string {
 		return ""
 	}
 	return split[len(split)-1]
-}
-
-func WriteReponse(w http.ResponseWriter, v interface{}) {
-	b, err := json.Marshal(v)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		if _, err = w.Write([]byte("to convert interface to json is failed. ")); err != nil {
-			HandleUnknownError()
-		}
-	}
-	w.WriteHeader(http.StatusOK)
-	if _, err = w.Write(b); err != nil {
-		HandleUnknownError()
-	}
 }
 
 func HandleUnknownError() {
