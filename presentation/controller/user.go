@@ -20,6 +20,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		if err = viewUser.RenderErrorJSON(w, http.StatusInternalServerError, err); err != nil {
 			HandleUnknownError()
 		}
+		return
 	}
 	viewUser.RenderJSON(w, http.StatusOK, user)
 }
