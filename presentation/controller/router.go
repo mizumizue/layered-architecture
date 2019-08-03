@@ -1,10 +1,8 @@
 package controller
 
 import (
-	"github.com/google/martian/log"
 	"github.com/gorilla/mux"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -51,9 +49,4 @@ func GetPathParam(r *http.Request) string {
 		return ""
 	}
 	return split[len(split)-1]
-}
-
-func HandleUnknownError() {
-	log.Errorf("unknown error")
-	os.Exit(1)
 }

@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/trewanek/LayeredArchitectureWithGolang/application"
 	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/view"
+	"log"
 	"net/http"
 )
 
@@ -18,7 +19,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	user, err := appUser.GetUserByID(ctx, userId)
 	if err != nil {
 		if err = viewUser.RenderErrorJSON(w, http.StatusInternalServerError, err); err != nil {
-			HandleUnknownError()
+			log.Printf("render response json failed: %v", err)
 		}
 		return
 	}
