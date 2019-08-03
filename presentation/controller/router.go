@@ -42,9 +42,8 @@ var routes = Routes{
 	},
 }
 
-func GetPathParam(r *http.Request) string {
-	p := r.URL.Path
-	split := strings.Split(p, "/")
+func GetPathParam(path string) string {
+	split := strings.Split(path, "/")
 	if len(split) <= 0 {
 		return ""
 	}

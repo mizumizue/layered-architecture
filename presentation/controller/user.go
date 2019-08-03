@@ -11,7 +11,7 @@ type User struct {
 }
 
 func GetUserById(w http.ResponseWriter, r *http.Request) {
-	userId := GetPathParam(r)
+	userId := GetPathParam(r.URL.Path)
 	ctx := r.Context()
 
 	appUser := application.NewUser()
