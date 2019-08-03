@@ -2,6 +2,7 @@ package view
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/google/martian/log"
 	"github.com/trewanek/LayeredArchitectureWithGolang/domain"
 	"net/http"
@@ -23,10 +24,10 @@ func (u *User) RenderJSON(w http.ResponseWriter, statusCode int, user *domain.Us
 	}
 }
 
-func (u *User) RenderErrorJSON(w http.ResponseWriter, statusCode int, err error) error {
+func (u *User) RenderErrorJSON(w http.ResponseWriter, statusCode int, responseErr error) error {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(statusCode)
-	if _, err = w.Write([]byte(err.Error())); err != nil {
+	if _, err := w.Write([]byte(fmt.Sprintf("error detail: %+v", responseErr))); err != nil {
 		return err
 	}
 	return nil

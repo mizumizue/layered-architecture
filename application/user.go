@@ -16,7 +16,7 @@ func NewUser() *User {
 func (u *User) GetUserByID(ctx context.Context, userID string) (*domain.User, error) {
 	user, err := domain.GetUserByID(ctx, userID)
 	if err != nil {
-		return nil, xerrors.Errorf("error in package application#GetUserByID: %w", err)
+		return nil, xerrors.Errorf("get user by id failed: %v", err)
 	}
 	return user, nil
 }

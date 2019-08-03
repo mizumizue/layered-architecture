@@ -34,17 +34,16 @@ func (u *User) GetFullName() string {
 }
 
 func GetUserByID(ctx context.Context, userID string) (*User, error) {
+
 	client, err := firestore.NewClient(ctx, os.Getenv(projectID))
 	defer client.Close()
 	if err != nil {
-		return nil, xerrors.Errorf(
-			"create database client failed. userID: %d, error in package domain#GetUserByID: %w", userID, err)
+		return nil, xerrors.Errorf("create firestore client failed: %v", err)
 	}
 
 	dto, err := infrastructure.GetUserByID(ctx, client, userID)
 	if err != nil {
-		return nil, xerrors.Errorf(
-			"infrastructure.GetUserByID failed. userID: %d, error in package domain#GetUserByID: %w", userID, err)
+		return nil, xerrors.Errorf("get user by id failed: %v", err)
 	}
 
 	return &User{

@@ -34,17 +34,16 @@ func NewUserDto(userID string, snapshot *UserSnapshot) *UserDto {
 
 func GetUserByID(ctx context.Context, client *firestore.Client, userID string) (*UserDto, error) {
 	docRef := client.Doc(path + userID)
+
 	snapshot, err := docRef.Get(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf(
-			"to get snapshot failed. userID: %d, error in package infrastructure#GetUserByID: %w", userID, err)
+		return nil, xerrors.Errorf("get user failed from firestore document ref: %v", err)
 	}
 
 	var userSnapshot UserSnapshot
 	err = snapshot.DataTo(&userSnapshot)
 	if err != nil {
-		return nil, xerrors.Errorf(
-			"unmarshal snapshot to struct failed. userID: %d, error in package infrastructure#GetUserByID: %w", userID, err)
+		return nil, xerrors.Errorf("convert snapshot to struct failed: %v", err)
 	}
 
 	return NewUserDto(userID, &userSnapshot), nil
