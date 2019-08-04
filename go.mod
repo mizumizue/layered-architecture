@@ -1,4 +1,4 @@
-module github.com/trewanek/LayeredArchitectureWithGolang
+module github.com/trewanek/layered-architecture
 
 require (
 	cloud.google.com/go v0.43.0

@@ -2,7 +2,7 @@ package domain
 
 import (
 	"context"
-	"github.com/trewanek/LayeredArchitectureWithGolang/infrastructure"
+	"github.com/trewanek/layered-architecture/infrastructure"
 	"golang.org/x/xerrors"
 )
 

@@ -3,7 +3,7 @@ package view
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/trewanek/LayeredArchitectureWithGolang/domain"
+	"github.com/trewanek/layered-architecture/domain"
 	"log"
 	"net/http"
 )

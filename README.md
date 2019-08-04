@@ -1,4 +1,4 @@
-# LayeredArchitectureWithGolang
+# layered-architecture
 
 This repository is layered architecture practice code.
 

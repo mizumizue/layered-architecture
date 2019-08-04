@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/trewanek/LayeredArchitectureWithGolang/application"
-	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/view"
+	"github.com/trewanek/layered-architecture/application"
+	"github.com/trewanek/layered-architecture/presentation/view"
 	"log"
 	"net/http"
 )

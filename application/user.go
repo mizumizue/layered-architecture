@@ -2,8 +2,8 @@ package application
 
 import (
 	"context"
-	"github.com/trewanek/LayeredArchitectureWithGolang/domain"
-	"github.com/trewanek/LayeredArchitectureWithGolang/infrastructure"
+	"github.com/trewanek/layered-architecture/domain"
+	"github.com/trewanek/layered-architecture/infrastructure"
 )
 
 type User struct {

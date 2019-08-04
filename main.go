@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/controller"
+	"github.com/trewanek/layered-architecture/presentation/controller"
 	"log"
 	"net/http"
 )
