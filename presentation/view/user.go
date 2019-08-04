@@ -3,7 +3,7 @@ package view
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/trewanek/layered-architecture/domain"
+	"github.com/trewanek/layered-architecture/domain/model"
 	"log"
 	"net/http"
 )
@@ -15,7 +15,7 @@ func NewUser() *User {
 	return &User{}
 }
 
-func (u *User) RenderJSON(w http.ResponseWriter, statusCode int, user *domain.User) {
+func (u *User) RenderJSON(w http.ResponseWriter, statusCode int, user *model.User) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(statusCode)
 	b, _ := json.Marshal(&user)

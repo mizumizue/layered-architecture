@@ -2,27 +2,32 @@ package application
 
 import (
 	"context"
-	"github.com/trewanek/layered-architecture/domain"
-	"github.com/trewanek/layered-architecture/infrastructure"
+	"github.com/trewanek/layered-architecture/domain/exception"
+	"github.com/trewanek/layered-architecture/domain/model"
+	"github.com/trewanek/layered-architecture/domain/repository"
+	"golang.org/x/xerrors"
 )
 
-type User struct {
+type UserUseCase struct {
+	repository repository.UserRepository
 }
 
-func NewUser() *User {
-	return &User{}
+func NewUserUseCase(repository repository.UserRepository) *UserUseCase {
+	return &UserUseCase{
+		repository: repository,
+	}
 }
 
-func (u *User) GetUserByID(ctx context.Context, userID string) (*domain.User, error) {
-	user, err := domain.GetUserByID(ctx, userID)
+func (u *UserUseCase) GetUserByID(ctx context.Context, userID string) (*model.User, error) {
+	user, err := u.repository.GetUserByID(ctx, userID)
 	if err != nil {
-		switch UnWrap(err).(type) {
-		case *infrastructure.NotFoundError:
-			return nil, Errorf(err, ResourceNotFound)
-		case *infrastructure.CovertDocumentRefToStructError:
-			return nil, Errorf(err, Internal)
+		switch err.(type) {
+		case *exception.ResourceNotFoundError:
+			return nil, xerrors.Errorf("not found: %w", err)
+		case *exception.InternalError:
+			return nil, xerrors.Errorf("internal error: %w", err)
 		}
-		return nil, Errorf(err, Unknown)
+		return nil, xerrors.Errorf("unknown error: %w", err)
 	}
 	return user, nil
 }

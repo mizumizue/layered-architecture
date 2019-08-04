@@ -5,6 +5,7 @@ This repository is layered architecture practice code.
 ## TODO
 
 - to define application responses
+- to Implement Dependency Injection
 
 ...etc
 
@@ -20,3 +21,8 @@ This repository is layered architecture practice code.
 ```
 go run main.go
 ```
+
+## Referenced below pages or book
+
+- [pospomeのサーバサイドアーキテクチャ](https://booth.pm/ja/items/1045782)
+- [Goのpackage構成と開発のベタープラクティス](https://engineer.recruit-lifestyle.co.jp/techblog/2018-03-16-go-ddd/)

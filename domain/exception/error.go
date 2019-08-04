@@ -1,4 +1,4 @@
-package application
+package exception
 
 import (
 	"fmt"
@@ -33,19 +33,15 @@ func Errorf(err error, errorCode int) error {
 	switch errorCode {
 	case ResourceNotFound:
 		return &ResourceNotFoundError{
-			msg:  fmt.Sprintf("%+v", xerrors.Errorf("resource not found: %w", err)),
+			msg:  fmt.Sprintf("%+v", err),
 			code: ResourceNotFound,
 		}
 	case Internal:
 		return &InternalError{
-			msg:  fmt.Sprintf("%+v", xerrors.Errorf("internal error: %w", err)),
+			msg:  fmt.Sprintf("%+v", err),
 			code: Internal,
 		}
 	default:
 		return xerrors.Errorf("unknown error: %w", err)
 	}
-}
-
-func UnWrap(err error) error {
-	return xerrors.Unwrap(err)
 }
