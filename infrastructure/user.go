@@ -3,7 +3,8 @@ package infrastructure
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"golang.org/x/xerrors"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -37,13 +38,17 @@ func GetUserByID(ctx context.Context, client *firestore.Client, userID string) (
 
 	snapshot, err := docRef.Get(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("get user failed from firestore document ref: %w", err)
+		s := status.Convert(err)
+		if s.Code() == codes.NotFound {
+			return nil, Errorf(err, NotFound)
+		}
+		return nil, Errorf(err, Unknown)
 	}
 
 	var userSnapshot UserSnapshot
 	err = snapshot.DataTo(&userSnapshot)
 	if err != nil {
-		return nil, xerrors.Errorf("convert snapshot to struct failed: %w", err)
+		return nil, Errorf(err, CovertDocumentRefToStruct)
 	}
 
 	return NewUserDto(userID, &userSnapshot), nil

@@ -2,10 +2,8 @@ package application
 
 import (
 	"context"
-	"github.com/trewanek/LayeredArchitectureWithGolang/application/errors"
 	"github.com/trewanek/LayeredArchitectureWithGolang/domain"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"github.com/trewanek/LayeredArchitectureWithGolang/infrastructure"
 )
 
 type User struct {
@@ -18,12 +16,13 @@ func NewUser() *User {
 func (u *User) GetUserByID(ctx context.Context, userID string) (*domain.User, error) {
 	user, err := domain.GetUserByID(ctx, userID)
 	if err != nil {
-		unwrapped := errors.UnWrap(err, 2)
-		s := status.Convert(unwrapped)
-		if s.Code() == codes.NotFound {
-			return nil, errors.Errorf(err, errors.ResourceNotFound)
+		switch UnWrap(err).(type) {
+		case *infrastructure.NotFoundError:
+			return nil, Errorf(err, ResourceNotFound)
+		case *infrastructure.CovertDocumentRefToStructError:
+			return nil, Errorf(err, Internal)
 		}
-		return nil, errors.Errorf(err, errors.Unknown)
+		return nil, Errorf(err, Unknown)
 	}
 	return user, nil
 }

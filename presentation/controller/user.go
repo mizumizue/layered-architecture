@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/trewanek/LayeredArchitectureWithGolang/application"
-	"github.com/trewanek/LayeredArchitectureWithGolang/application/errors"
 	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/view"
 	"net/http"
 )
@@ -19,9 +18,10 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	user, err := appUser.GetUserByID(ctx, userId)
 	if err != nil {
 		switch err.(type) {
-		case *errors.ResourceNotFoundError:
+		case *application.ResourceNotFoundError:
 			viewUser.RenderErrorJSON(w, http.StatusNotFound, err)
 			return
+		case *application.InternalError:
 		default:
 			viewUser.RenderErrorJSON(w, http.StatusInternalServerError, err)
 			return
