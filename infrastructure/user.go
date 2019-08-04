@@ -37,13 +37,13 @@ func GetUserByID(ctx context.Context, client *firestore.Client, userID string) (
 
 	snapshot, err := docRef.Get(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("get user failed from firestore document ref: %v", err)
+		return nil, xerrors.Errorf("get user failed from firestore document ref: %w", err)
 	}
 
 	var userSnapshot UserSnapshot
 	err = snapshot.DataTo(&userSnapshot)
 	if err != nil {
-		return nil, xerrors.Errorf("convert snapshot to struct failed: %v", err)
+		return nil, xerrors.Errorf("convert snapshot to struct failed: %w", err)
 	}
 
 	return NewUserDto(userID, &userSnapshot), nil
