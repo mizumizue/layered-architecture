@@ -12,8 +12,7 @@
 *.out
 
 # .idea
-misc.xml
-modules.xml
-vcs.xml
+.idea/**.xml
+.idea/**.iml
 .idea/dictionaries
-**.iml
+.idea/inspectionProfiles
