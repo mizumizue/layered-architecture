@@ -14,3 +14,9 @@ This repository is layered architecture practice code.
 - [xerrors](https://github.com/golang/xerrors)
 - [gin](https://github.com/gin-gonic/gin)
 - [delve](https://github.com/go-delve/delve)
+
+## Run local server: http://localhost:8080
+
+```
+go run main.go
+```
