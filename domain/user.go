@@ -1,11 +1,9 @@
 package domain
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
 	"github.com/trewanek/LayeredArchitectureWithGolang/infrastructure"
 	"golang.org/x/xerrors"
-	"os"
 )
 
 type User struct {
@@ -34,14 +32,9 @@ func (u *User) GetFullName() string {
 }
 
 func GetUserByID(ctx context.Context, userID string) (*User, error) {
-
-	client, err := firestore.NewClient(ctx, os.Getenv(projectID))
-	defer client.Close()
-	if err != nil {
-		return nil, xerrors.Errorf("create firestore client failed: %w", err)
-	}
-
-	dto, err := infrastructure.GetUserByID(ctx, client, userID)
+	dbconn, err := infrastructure.NewDBConn(ctx)
+	defer dbconn.Close()
+	dto, err := infrastructure.GetUserByID(ctx, dbconn, userID)
 	if err != nil {
 		return nil, xerrors.Errorf("get user by id failed: %w", err)
 	}

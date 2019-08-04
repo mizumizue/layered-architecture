@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/trewanek/LayeredArchitectureWithGolang/application"
 	"github.com/trewanek/LayeredArchitectureWithGolang/presentation/view"
+	"log"
 	"net/http"
 )
 
@@ -10,6 +11,8 @@ type User struct {
 }
 
 func GetUserById(w http.ResponseWriter, r *http.Request) {
+	log.Printf("request: %+v", r)
+
 	userId := GetPathParam(r.URL.Path)
 	ctx := r.Context()
 
