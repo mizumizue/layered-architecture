@@ -3,7 +3,7 @@ package renderer
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/trewanek/layered-architecture/domain/exception"
+	"github.com/trewanek/layered-architecture/domain"
 	"log"
 	"net/http"
 )
@@ -11,10 +11,10 @@ import (
 func RenderJSONResult(w http.ResponseWriter, i interface{}, err error) {
 	if err != nil {
 		switch err.(type) {
-		case *exception.ResourceNotFoundError:
+		case *domain.ResourceNotFoundError:
 			renderErrorJSON(w, http.StatusNotFound, err)
 			return
-		case *exception.InternalError:
+		case *domain.InternalError:
 			renderErrorJSON(w, http.StatusInternalServerError, err)
 			return
 		default:

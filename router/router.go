@@ -30,6 +30,9 @@ const (
 func NewRouter(ser registory.Service) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
+	var GetUsers http.HandlerFunc = handler.NewUserHandler(ser).GetUsers
+	router.Methods(GET).Path(formatPath(versionV1, "users")).Name("GetUsers").Handler(GetUsers)
+
 	var GetUserById http.HandlerFunc = handler.NewUserHandler(ser).GetUserById
 	router.Methods(GET).Path(formatPath(versionV1, "users/{userId}")).Name("GetUserById").Handler(GetUserById)
 

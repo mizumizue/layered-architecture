@@ -16,6 +16,10 @@ func NewUserUseCase(userSer service.UserService) *UserUseCase {
 	}
 }
 
+func (u *UserUseCase) GetUsers(ctx context.Context) ([]*model.User, error) {
+	return u.userService.GetUsers(ctx)
+}
+
 func (u *UserUseCase) GetUserByID(ctx context.Context, userID string) (*model.User, error) {
 	return u.userService.GetUserByID(ctx, userID)
 }

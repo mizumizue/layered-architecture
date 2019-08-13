@@ -3,10 +3,10 @@ package firestore
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"github.com/trewanek/layered-architecture/domain/exception"
+	"github.com/trewanek/layered-architecture/domain"
 	"github.com/trewanek/layered-architecture/domain/model"
 	"github.com/trewanek/layered-architecture/domain/repository"
-	"golang.org/x/xerrors"
+	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"os"
@@ -21,18 +21,49 @@ type UserSnapshot struct {
 	FirstName string `firestore:"FirstName"`
 	LastName  string `firestore:"LastName"`
 	Address   string `firestore:"Address"`
+	Age       int    `firestore:"Age"`
 }
 
-type UserRepository struct{}
+type UserRepository struct {
+}
 
 func NewUserRepository() repository.UserRepository {
 	return &UserRepository{}
 }
 
+func (r *UserRepository) GetUsers(ctx context.Context) ([]*model.User, error) {
+	var client *firestore.Client
+	var err error
+	if client, err = firestore.NewClient(ctx, os.Getenv(projectID)); err != nil {
+		return nil, err
+	}
+	defer client.Close()
+
+	var users []*model.User
+	itr := client.Collection("users").Documents(ctx)
+	for {
+		var err error
+		snap, err := itr.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, domain.Errorf(iteratorNextFailed(err), domain.Internal)
+		}
+		var us UserSnapshot
+		if err = snap.DataTo(&us); err != nil {
+			return nil, domain.Errorf(convertToDataFailed(err), domain.Internal)
+		}
+		users = append(users, newUserFromSnapshot(snap.Ref.ID, &us))
+	}
+	return users, nil
+}
+
 func (r *UserRepository) GetUserByID(ctx context.Context, userID string) (*model.User, error) {
-	client, err := firestore.NewClient(ctx, os.Getenv(projectID))
-	if err != nil {
-		return nil, xerrors.Errorf("create firestore client failed: %w", err)
+	var client *firestore.Client
+	var err error
+	if client, err = firestore.NewClient(ctx, os.Getenv(projectID)); err != nil {
+		return nil, err
 	}
 	defer client.Close()
 
@@ -41,18 +72,17 @@ func (r *UserRepository) GetUserByID(ctx context.Context, userID string) (*model
 	if err != nil {
 		s := status.Convert(err)
 		if s.Code() == codes.NotFound {
-			return nil, exception.Errorf(
-				xerrors.Errorf("resource not found: %w", err), exception.ResourceNotFound)
+			return nil, domain.Errorf(documentNotFound(err), domain.ResourceNotFound)
 		}
-		return nil, exception.Errorf(xerrors.Errorf("unknown error: %w", err), exception.Internal)
+		return nil, domain.Errorf(firestoreUnknownErr(err), domain.Internal)
 	}
 
 	var userSnapshot UserSnapshot
 	err = snapshot.DataTo(&userSnapshot)
 	if err != nil {
-		return nil, exception.Errorf(xerrors.Errorf("convert data to struct error: %w", err), exception.Internal)
+		return nil, domain.Errorf(convertToDataFailed(err), domain.Internal)
 	}
-	return newUserFromSnapshot(userID, &userSnapshot), nil
+	return newUserFromSnapshot(snapshot.Ref.ID, &userSnapshot), nil
 }
 
 func newUserFromSnapshot(userID string, snapshot *UserSnapshot) *model.User {
@@ -61,5 +91,6 @@ func newUserFromSnapshot(userID string, snapshot *UserSnapshot) *model.User {
 		FirstName: snapshot.FirstName,
 		LastName:  snapshot.LastName,
 		Address:   snapshot.Address,
+		Age:       snapshot.Age,
 	}
 }

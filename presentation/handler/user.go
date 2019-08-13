@@ -17,6 +17,14 @@ func NewUserHandler(ser registory.Service) *UserHandler {
 	return &UserHandler{ser: ser}
 }
 
+func (u *UserHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
+	log.Printf("request: %+v", r)
+	ctx := r.Context()
+	use := application.NewUserUseCase(u.ser.NewUserService())
+	user, err := use.GetUsers(ctx)
+	renderer.RenderJSONResult(w, user, err)
+}
+
 func (u *UserHandler) GetUserById(w http.ResponseWriter, r *http.Request) {
 	log.Printf("request: %+v", r)
 	ctx := r.Context()

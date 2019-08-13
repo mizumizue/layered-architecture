@@ -1,4 +1,4 @@
-package exception
+package domain
 
 import (
 	"fmt"
